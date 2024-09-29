@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
+import ContactForm from "./contactForm";
+import ContactList from "./contactList";
+import GroupForm from "./groupForm";
 
 
-const Phonebook = () => {
+const Phonebooker = () => {
     const [contacts, setContacts] = useState([]);
     const [groups, setGroups] = useState([]);
     const [editingContact, setEditingContact] = useState(null);
@@ -47,5 +50,27 @@ const Phonebook = () => {
             setGroups([...groups, {id : Date.now(), ...group}]);
         }
     };
-    
+
+    const deleteGroup = (id) => {
+        setGroups(groups.filter(group => group.id !== id));
+    };
+
+    return (
+        <div>
+            <h1>전화번호부</h1>
+            <ContactForm onSubmit={addContact} initialContact={editContact} />
+            <ContactList contacts={contacts} onDelete={deleteContact} onEdit={editContact} />
+            <GroupForm onSubmit={addGroup} initialGroup={editingGroup} />
+            <ul>
+                {groups.map(group => (
+                    <li key={group.id}>
+                        {group.name}
+                        <button onClick={() => deleteGroup(group.id)}>삭제</button>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    )
 }
+
+export default Phonebooker;
